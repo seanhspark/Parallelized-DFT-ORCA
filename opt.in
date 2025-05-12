@@ -1,0 +1,5 @@
+%Nosave
+%NProcShared=40
+%Mem=32GB
+#n wb97X-D3BJ/6-31G(d,p) Opt=(MaxCyc=999) Freq
+

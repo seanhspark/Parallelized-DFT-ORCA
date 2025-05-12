@@ -1,0 +1,16 @@
+!b97-3c RIJCOSX def2-mTZVP def2/J freq
+
+%scf
+maxiter 500
+end
+
+%geom
+MaxIter 999
+end
+
+%pal
+nprocs 8
+end
+
+%maxcore 25000
+

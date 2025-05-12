@@ -1,0 +1,18 @@
+!wb97x-D3 RIJCOSX def2-TZVP def2/J CPCM(acetonitrile)
+
+%pal
+nprocs 16
+end
+
+%maxcore 12500
+%tddft
+nroots 3
+dosoc true
+triplets true
+end
+
+%output
+ PrintLevel Normal
+ Print[ P_MOs ] 1
+ Print[ P_Overlap ] 1
+end

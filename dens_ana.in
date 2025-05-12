@@ -1,0 +1,11 @@
+rtype='orca'
+rfile='orca_vert_exc_s0.out'
+read_binary=True
+mo_file='orca_vert_exc_s0.molden.input'
+comp_ntos=True
+comp_dntos=False
+jmol_orbitals=True
+molden_orbitals=True
+alphabeta=False
+prop_list=['PRNTO', 'Z_HE']
+
