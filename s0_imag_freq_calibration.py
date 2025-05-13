@@ -88,6 +88,7 @@ def removing_imag(ff):
 
 # Initialize a counter
 numeric_dir_count = 0
+modified_folders = []
 
 # List everything in the current directory
 for item in os.listdir('.'):
@@ -112,8 +113,10 @@ for subdir in range(1, numeric_dir_count + 1):  # Modify the range for your actu
             IMAGINARY = removing_imag(os.path.join(subdir_path, filename))
             if IMAGINARY == True:
                 counter += 1
+                modified_folders.append(str(subdir))
 
 print()
 print(f"{counter} files were modified")
+print(f"Modified subdirectories: {modified_folders}")
             
 
