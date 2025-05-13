@@ -54,8 +54,8 @@ GEOM_DIR = '.'
 # Directory where the .com files will be saved
 INPDIR = 'opt_b97-3c/'
 
-
-lists = YOUR COPIED LIST HERE
+# YOUR COPIED LIST HERE
+lists = ['2', '13', '24', '31', '39', '49', '50', '58', '63', '68', '73', '74']
 ```
 
 Then run
