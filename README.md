@@ -1,5 +1,18 @@
 Note that this calculations specifically works in Niagara cluster. You will need to specify the directory of ORCA, openbabel etc. in each .sh file.
 
+Optional step: check if the SMILES strings are valid.
+
+```bash
+python filter_smiles.py --raw_smiles smiles_raw/ --pp_smiles smiles_pp
+```
+
+Then you can generate the gen_smiles.csv using create_gen_smiles.py.
+
+```bash
+python create_gen_smiles.py --smiles smiles_pp ----smiles_gen smiles_pp/gen_smiles.csv
+```
+
+
 
 First, run below to generate .xyz coordinates and do force-field calculation.
 
@@ -7,6 +20,13 @@ First, run below to generate .xyz coordinates and do force-field calculation.
 python obabel.py
 python run_uff.py
 ```
+
+If running a job with multiple cpus, you can use the parallelized version of obabel.py:
+
+```bash
+python obabel_parallel.py
+```
+
 
 Once the run is done, then run below to distribute in several sub-directories and quick search the conformers.
 
