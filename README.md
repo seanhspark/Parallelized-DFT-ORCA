@@ -133,4 +133,5 @@ python get_orb_density.py
 Then the density data will be saved in orbital_density_mulliken.csv
 
 The theoretical calculation output example of SP001 is stored in FigShare.
+
 This customized code was used for "A self-driving lab for discovering tunable and soluble organic lasers".
