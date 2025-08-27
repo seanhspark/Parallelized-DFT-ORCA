@@ -6,9 +6,15 @@ import re
 from tqdm import tqdm
 
 
-# Read the template for the .in file
-opt = open('orca_opt.in').readlines()
-sh = open('orca_opt.sh').readlines()
+if not os.path.isfile("orca_opt.in") or not os.path.isfile("orca_opt.sh"):
+    print("Missing orca_opt.in or orca_opt.sh in the current directory.")
+    sys.exit(1)
+
+
+with open("orca_opt.in") as f:
+    opt = f.readlines()
+with open("orca_opt.sh") as f:
+    sh = f.readlines()
 
 # Directory where the .xyz files are located
 GEOM_DIR = '.'
@@ -17,14 +23,14 @@ GEOM_DIR = '.'
 INPDIR = 'opt_b97-3c/'
 
 
-#lists = os.listdir('.')
-#omit_lists = ['9', '10', '21', '22', '23', '29', '41', '42', '56', '63', '80']
-#lists = [item for item in lists if item not in omit_lists]
+valid_dirs = os.listdir('.')
+#omit_dirs = ['9', '10', '21', '22', '23', '29', '41', '42', '56', '63', '80']
+#valid_dirs = [item for item in lists if item not in omit_lists]
 
-lists = ['9', '10', '21', '22', '23', '29', '41', '42', '56', '63', '80']
+#valid_dirs = ['9', '10', '21', '22', '23', '29', '41', '42', '56', '63', '80']
 
 
-for par in lists:
+for par in valid_dirs:
     if os.path.isdir(par) and par.isdigit():
         directory = par+'/best_geom/'
         os.chdir(directory)

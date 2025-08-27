@@ -16,6 +16,7 @@ def extract_excitation_data(filename, num_states=3):
     data = {}
     start_line = None  # Initialize to None
     start_line_triplet = None
+    start_line_soc = None
   
     count = 0
 
@@ -66,16 +67,47 @@ def extract_excitation_data(filename, num_states=3):
                     ev_index = parts.index("eV") - 1  # find the index just before "eV"
                     data[f"E_T{count+1}(eV)"] = float(parts[ev_index])
                     count += 1
-                    if count == (num_states - 1):
+                    if count == (num_states):
                         break  # Stop after collecting enough
                 except (ValueError, IndexError):
                     # Skip if something wrong with line format
                     continue
-                  
+
         try:
             data["E(S1-T1)(eV)"] = round(data["E_S1(eV)"] - data["E_T1(eV)"], 2)
         except KeyError as e:
             print(f"*** Error calculating E(S1-T1): missing key {e} in {filename} ***")
+
+
+
+        for i in range(len(lines) - 1, -1, -1):
+            if "CALCULATED SOCME BETWEEN TRIPLETS AND SINGLETS" in lines[i]:
+                start_line_soc = i  # Skip header lines
+                break
+
+        socme_count = 0
+        if start_line_soc:
+            for line in lines[start_line_soc + 4:]:  # Skip header lines (3 lines + 1)
+                if not line.strip():
+                    break  # Stop at first blank line
+                try:
+                    parts = line.split()
+                    if len(parts) != 1:
+                        triplet = int(parts[0])
+                        singlet = int(parts[1])
+                        # Extract imaginary parts (2nd value inside each (Re, Im) pair)
+                        ImZ = float(parts[5])
+                        ImX = float(parts[10])
+                        ImY = float(parts[15])
+                        # print(filename)
+                        # print(f"Triplet: {triplet}, Singlet: {singlet}, ImX: {ImX}, ImY: {ImY}, ImZ: {ImZ}")
+                        socme = round((ImX**2 + ImY**2 + ImZ**2) ** 0.5, 2)
+                        data[f"SOC_T{triplet}_S{singlet}(cm^-1)"] = socme
+                        socme_count += 1
+                        if socme_count == (num_states*(num_states+1)):
+                            break
+                except (ValueError, IndexError):
+                    continue
       
         return data
 
@@ -94,7 +126,7 @@ def main():
     # Loop through numeric subdirectories
     for subdir in range(1, numeric_dir_count + 1):
         print(f"Processing subdir {subdir}...")
-        subdir_path = os.path.join(str(subdir), "best_geom/opt_b97-3c/vert_exc/")
+        subdir_path = os.path.join(str(subdir), "best_geom/opt_b97-3c/vert_exc_soc/")
 
         if not os.path.exists(subdir_path):
             print(f"Warning: {subdir_path} does not exist, skipping...")
@@ -125,7 +157,7 @@ def main():
     df = df.sort_values(by='id')
 
     # Save to CSV
-    df.to_csv("VEE_b97-3c.csv", index=False)
+    df.to_csv("VEE_b97-3c_CPCM_SOC.csv", index=False)
     print("Successfully saved.")
 
 if __name__ == "__main__":

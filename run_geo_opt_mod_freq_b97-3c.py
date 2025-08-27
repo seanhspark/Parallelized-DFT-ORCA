@@ -16,11 +16,11 @@ GEOM_DIR = '.'
 INPDIR = 'opt_b97-3c/'
 
 
-#lists = os.listdir('.')
-#lists = [d for d in lists if '17' not in d and '19' not in d]
-lists = ['2', '13', '24', '31', '39', '49', '50', '58', '63', '68', '73', '74']
+valid_dirs = os.listdir('.')
+#valid_dirs = [d for d in valid_dirs if '17' not in d and '19' not in d]
+#valid_dirs = ['2', '13', '24', '31', '39', '49', '50', '58', '63', '68', '73', '74']
 
-for par in lists:
+for par in valid_dirs:
     if os.path.isdir(par) and par.isdigit():
         directory = par+'/best_geom/'
         os.chdir(directory)

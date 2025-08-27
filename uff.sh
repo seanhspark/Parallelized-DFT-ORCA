@@ -12,7 +12,7 @@ export GAUSS_EXEDIR="$gr/g16C01/bsd:$gr/g16C01"
 export GAUSS_LEXEDIR="$gr/g16C01/linda-exe"
 export GAUSS_ARCHDIR="$gr/g16C01/arch"
 export GAUSS_BSDDIR="$gr/g16C01/bsd"
-export GAUSS_SCRDIR=$workdir # change to your scratch directory
+export GAUSS_SCRDIR=$SLURM_TMPDIR
 export LD_LIBRARY_PATH="$GAUSS_EXEDIR:$LD_LIBRARY_PATH"
 export PATH="$PATH:$gr/gauopen:$GAUSS_EXEDIR"
 
@@ -39,4 +39,4 @@ cp $SLURM_SUBMIT_DIR/../out2xyz.py $SLURM_SUBMIT_DIR
 /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx512/Core/python/3.10.2/bin/python $SLURM_SUBMIT_DIR/out2xyz.py
 cp $SLURM_SUBMIT_DIR/opt_xyz/*.xyz $SLURM_SUBMIT_DIR/../
 
-rm -r $SLURM_SUBMIT_DIR
+# rm -r $SLURM_SUBMIT_DIR
