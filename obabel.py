@@ -2,14 +2,14 @@ import subprocess
 import pandas as pd
 
 # Sample DataFrame for demonstration
-df = pd.read_csv('gen_smiles.csv')
+df = pd.read_csv('smiles.csv')
 
 # Define the log file name
 log_file_name = "obabel.log"
 
 # Open the log file for writing
 with open(log_file_name, "w") as log_file:
-    for smi, mol_id in zip(df['smiles'], df['id']):
+    for smi, mol_id in zip(df['oligomer_smiles'], df['stock_id']):
         # Define the command to run
         command = f'obabel -:"{smi}" -O {mol_id}.xyz --gen3d best'
 

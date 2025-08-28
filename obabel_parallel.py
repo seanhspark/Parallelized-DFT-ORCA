@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 def run_obabel(row):
-    smi, mol_id = row['smiles'], row['id']
+    smi, mol_id = row['oligomer_smiles'], row['stock_id']
     out_file = f"{mol_id}.xyz"
     command = f'obabel -:"{smi}" -O {out_file} --gen3d best'
 
@@ -19,7 +19,7 @@ def run_obabel(row):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("gen_smiles.csv")
+    df = pd.read_csv("smiles.csv")
 
     # Get number of workers from SLURM or fallback to all CPUs
     n_workers = int(os.environ.get("SLURM_CPUS_PER_TASK", os.cpu_count()))
