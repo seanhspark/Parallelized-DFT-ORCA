@@ -1,137 +1,154 @@
-Note that this calculations specifically works in Niagara cluster. You will need to specify the directory of ORCA (ver. 5.0.3), CREST (ver. 2.12), openbabel (ver. 3.1.1), TheoDORE (ver. 3.1.1), Jmol (ver. 16.2.1) in each .sh file.
+# Automated Quantum Chemical Pipeline for Organic Laser Molecules
 
-The whole pipeline worked with Python ver. 3.10.2.
+This repository contains a customized Python-based pipeline for high-throughput quantum chemical calculations, specifically designed for execution on the **Niagara** HPC cluster.  
 
-Optional step: check if the SMILES strings are valid.
+The workflow automates geometry optimization, vibrational frequency checks, vertical excitation energy calculations, and natural transition orbital (NTO) analysis for organic molecules.  
 
+> ⚠️ **Note**: This pipeline is tailored for use on the **Niagara** cluster. Please ensure the following dependencies are properly installed and their paths are specified in each `.sh` script:
+- **ORCA** v5.0.3  
+- **CREST** v2.12  
+- **OpenBabel** v3.1.1  
+- **TheoDORE** v3.1.1  
+- **Jmol** v16.2.1  
+
+The pipeline was developed and tested using **Python 3.10.2**.
+
+---
+
+## Step-by-Step Workflow
+
+### 1. (Optional) Validate Raw SMILES Strings
 ```bash
 python filter_smiles.py --raw_smiles smiles_raw/ --pp_smiles smiles_pp
 ```
 
-Then you can generate the gen_smiles.csv using create_gen_smiles.py.
-
+### 2. Generate Canonicalized SMILES File
 ```bash
-python create_gen_smiles.py --smiles smiles_pp ----smiles_gen smiles_pp/gen_smiles.csv
+python create_gen_smiles.py --smiles smiles_pp --smiles_gen smiles_pp/gen_smiles.csv
 ```
 
-
-
-First, run below to generate .xyz coordinates and do force-field calculation.
-
+### 3. Generate 3D Coordinates and Perform UFF Optimization
 ```bash
 python obabel.py
 python run_uff.py
 ```
 
-If running a job with multiple cpus, you can use the parallelized version of obabel.py:
-
+#### For parallelized preprocessing:
 ```bash
 python obabel_parallel.py
 ```
 
-
-Once the run is done, then run below to distribute in several sub-directories and quick search the conformers.
-
+### 4. Conformer Search with CREST
 ```bash
 python xyz_distribution.py
 python run_crest.py
 ```
 
-Once all runs are done, run below to optimize the geometry at ground state.
-
+### 5. Ground-State Geometry Optimization
 ```bash
 python run_geo_opt_b97-3c.py
 ```
 
-Once all runs are done, run below to calculate frequencies.
-
+### 6. Frequency Calculation (B97-3c)
 ```bash
 python run_s0_freq_b97-3c.py
 ```
 
-Once all runs are done, check if there are imaginary frequencies.
-
+### 7. Check for Imaginary Frequencies
 ```bash
 python get_s0_freq_check.py
 ```
 
-If there is imaginary frequency, the code will automatically modify the geometry and generate the input files for geometry optimization. You will need to run another round for them.
-The code will print out the list of sub-directories that contain modified inputs. For example...
-
-Modified subdirectories: ['2', '13', '24', '31', '39', '49', '50', '58', '63', '68', '73', '74']
-
-Copy the whole list, and paste in two python scripts below:
-
-run_geo_opt_mod_freq_b97-3c.py
-
-run_s0_freq_b97-3c.py
-
-For instance,
+If any imaginary frequencies are detected, input files for re-optimization will be automatically generated. The script will print a list of affected subdirectories:
 
 ```
-sh = open('orca_opt.sh').readlines()
+Modified subdirectories: ['2', '13', '24', '31', '39', '49', '50', '58', '63', '68', '73', '74']
+```
 
-# Directory where the .xyz files are located
-GEOM_DIR = '.'
+Paste this list into the following two scripts:
 
-# Directory where the .com files will be saved
-INPDIR = 'opt_b97-3c/'
+- `run_geo_opt_mod_freq_b97-3c.py`
+- `run_s0_freq_b97-3c.py`
 
-# YOUR COPIED LIST HERE
+Example:
+```python
 lists = ['2', '13', '24', '31', '39', '49', '50', '58', '63', '68', '73', '74']
 ```
 
-Then run
+Then re-run:
 ```bash
 python run_geo_opt_mod_freq_b97-3c.py
-```
-
-Once all runs are done, run
-```bash
 python run_s0_freq_b97-3c.py
 ```
 
-Once all runs are done, run get_s0_freq_check.py to see if there is still imaginary frequencies. If yes, repeat the procedure again.
-If all frequencies are converged, you can collect the HOMO-LUMO energies of the optimized geometries by running:
+Repeat the frequency check step until no imaginary frequencies remain.
 
+---
+
+### 8. Extract HOMO–LUMO Energies
 ```bash
 python get_geo_opt_result.py
 ```
 
-Now, run TD-DFT to calculate Franck-Condon properties at ground state, based on the optimized geometries.
+---
+
+### 9. TD-DFT Calculation: Franck–Condon Properties
 ```bash
 python run_vert_exc.py
 ```
 
-Once all runs are done, parse key parameters such as oscillator stregnths, singlet and triplet energies, spin-orbit coupling etc. from each output files. The final result will be saved as "VEE_b97-3c.csv"
+### 10. Extract Key Excitation Parameters
 ```bash
 python get_vert_exc_result.py
 ```
 
-Now, you can run the automatic natural transition orbital (NTO) calculation. Generate input files.
-To run the code below, you need to install xyz2mol.
+The results, including oscillator strengths, singlet/triplet energies, and spin–orbit coupling, will be saved in:
+```
+VEE_b97-3c.csv
+```
 
+---
+
+### 11. Natural Transition Orbital (NTO) Analysis
+
+#### Install Dependencies:
 ```bash
 pip install numpy networkx
 pip install git+https://github.com/jensengroup/xyz2mol.git
 ```
 
-Then you can run the code below:
-
+#### Generate and Visualize NTOs:
 ```bash
 python nto_analysis_visualization.py
-python nto_analysis_visualization.sh
+bash nto_analysis_visualization.sh
 ```
 
-Now, you will have visualized NTOs in png in opt_b97-3c/vert_exc/nto_mulliken/
-You can parse the density values of each fragment using the script below:
+The NTO figures will be saved as PNGs in:
+```
+opt_b97-3c/vert_exc/nto_mulliken/
+```
 
+---
+
+### 12. Fragment Orbital Density Decomposition
 ```bash
 python get_orb_density.py
 ```
 
-Then the density data will be saved in orbital_density_mulliken.csv
+Result:
+```
+orbital_density_mulliken.csv
+```
 
-The theoretical calculation output example of SP001 is stored in FigShare.
+---
 
-This customized code was used for "A self-driving lab for discovering tunable and soluble organic lasers".
+## Output Example
+
+Example theoretical output for `SP001` is available on **FigShare**.
+
+---
+
+## Citation
+
+This customized pipeline was developed and used in the study:  
+**"A self-driving lab for discovering tunable and soluble organic lasers"**
