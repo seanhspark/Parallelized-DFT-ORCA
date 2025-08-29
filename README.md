@@ -28,6 +28,9 @@ python create_gen_smiles.py --smiles smiles_pp --smiles_gen smiles_pp/gen_smiles
 ```
 
 ### 3. Generate 3D Coordinates and Perform UFF Optimization
+
+Here, smiles.csv provides the SMILES strings of A-B-A type oligomers for example.
+
 ```bash
 python obabel.py
 python run_uff.py
@@ -150,5 +153,6 @@ Example theoretical output for `SP001` is available on **FigShare**.
 
 ## Citation
 
-This customized pipeline was developed and used in the study:  
+This customized pipeline was developed and used in the study:
 **"A self-driving lab for discovering tunable and soluble organic lasers"**
+Hyun Suk Park, Mahdi Mazaheri, Changhyeok Choi, Han Hao, Davide Avagliano, Eric Isbrandt, Buddhika S. B. Karunathilaka, Chihaya Adachi, Alán Aspuru-Guzik
