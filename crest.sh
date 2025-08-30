@@ -29,7 +29,7 @@ command_template='
     cp "$fname.xyz" "$fname"
     cd "$fname"
     cp $SLURM_SUBMIT_DIR/constraints.inp .
-    crest "$fname.xyz" --gfn2 --cinp constraints.inp --chg -1 --uhf 1 --mquick --noreftopo -T 16 > "$fname.log"
+    crest "$fname.xyz" --gfn2 --cinp constraints.inp --mquick --noreftopo -T 16 > "$fname.log"
     mv "$fname.log" "$fname.out"
     cp crest_best.xyz $SLURM_SUBMIT_DIR/best_geom/$fname.xyz
     cd "$SLURM_SUBMIT_DIR"
@@ -37,7 +37,7 @@ command_template='
     if [ -e "$fname" ] && [ ! -e "$fname/$fname.out" ]; then
       cd "$fname"
       cp $SLURM_SUBMIT_DIR/constraints.inp .
-      crest "$fname.xyz" --gfn2 --cinp constraints.inp --chg -1 --uhf 1 --mquick --noreftopo -T 16 > "$fname.log"
+      crest "$fname.xyz" --gfn2 --cinp constraints.inp --mquick --noreftopo -T 16 > "$fname.log"
       mv "$fname.log" "$fname.out"
       cp crest_best.xyz $SLURM_SUBMIT_DIR/best_geom/$fname.xyz
       cd "$SLURM_SUBMIT_DIR"
