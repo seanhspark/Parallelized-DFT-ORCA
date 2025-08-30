@@ -13,14 +13,6 @@ The workflow automates geometry optimization, vibrational frequency checks, vert
 
 The pipeline was developed and tested using **Python 3.10.2**.
 
-
-## ORCA Dependency
-
-This project uses the [ORCA quantum chemistry software](https://orcaforum.kofo.mpg.de), which is **not included** in this repository.  
-To run ORCA-dependent scripts, please download ORCA separately from the official website after agreeing to its academic license terms.
-
-We do not distribute ORCA binaries, source, or installation tools.
-
 ---
 
 ## Step-by-Step Workflow
@@ -153,9 +145,21 @@ orbital_density_mulliken.csv
 
 ---
 
-## Output Example
+## Notes
 
-Example theoretical output for `SP001` is available on **FigShare**.
+> **Output Example**
+> Example theoretical output for `SP001` is available on **FigShare**.
+>
+> **ORCA Dependency**
+> This project uses the [ORCA quantum chemistry software](https://orcaforum.kofo.mpg.de), which is **not included** in this repository.  
+> To run ORCA-dependent scripts, please download ORCA separately from the official website after agreeing to its academic license terms.
+> We do not distribute ORCA binaries, source, or installation tools.
+>
+> **Production-level calculations**  
+> The production-level DFT calculations reported in this study require high-performance computing (HPC) resources and are not feasible on a standard desktop computer, with run times depending strongly on system size and computational settings.  
+>  
+> **Installation time**  
+> The main quantum chemistry packages (ORCA, CREST, TheoDORE, etc.) were accessed via pre-installed HPC modules, so installation time on a desktop computer is not applicable.
 
 ---
 
