@@ -13,6 +13,14 @@ The workflow automates geometry optimization, vibrational frequency checks, vert
 
 The pipeline was developed and tested using **Python 3.10.2**.
 
+
+## ORCA Dependency
+
+This project uses the [ORCA quantum chemistry software](https://orcaforum.kofo.mpg.de), which is **not included** in this repository.  
+To run ORCA-dependent scripts, please download ORCA separately from the official website after agreeing to its academic license terms.
+
+We do not distribute ORCA binaries, source, or installation tools.
+
 ---
 
 ## Step-by-Step Workflow
@@ -154,5 +162,7 @@ Example theoretical output for `SP001` is available on **FigShare**.
 ## Citation
 
 This customized pipeline was developed and used in the study:
+
 **"A self-driving lab for discovering tunable and soluble organic lasers"**
+
 Hyun Suk Park, Mahdi Mazaheri, Changhyeok Choi, Han Hao, Davide Avagliano, Eric Isbrandt, Buddhika S. B. Karunathilaka, Chihaya Adachi, Alán Aspuru-Guzik
